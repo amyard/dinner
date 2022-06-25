@@ -7,13 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\BuyBerDinner.Contracts\BuyBerDinner.Contracts.csproj" />
     <ProjectReference Include="..\BuyBerDinner.Application\BuyBerDinner.Application.csproj" />
     <ProjectReference Include="..\BuyBerDinner.Infrastructure\BuyBerDinner.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers" />
   </ItemGroup>
 
 </Project>
