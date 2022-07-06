@@ -12,8 +12,4 @@
     <ProjectReference Include="..\BuyBerDinner.Infrastructure\BuyBerDinner.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers" />
-  </ItemGroup>
-
 </Project>
