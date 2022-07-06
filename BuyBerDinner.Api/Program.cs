@@ -1,8 +1,12 @@
-using BuyBerDinner.Application.Services.Authentication;
+using BuyBerDinner.Application;
+using BuyBerDinner.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 {
-    builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+    builder.Services
+        .AddApplication()
+        .AddInfrastructure();
+    
     builder.Services.AddControllers();
 }
 
