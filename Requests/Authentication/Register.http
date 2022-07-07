@@ -1,5 +1,4 @@
-﻿
-POST https://localhost:7041/auth/register
+﻿POST {{host}}/auth/register
 Content-Type: application/json
 
 {

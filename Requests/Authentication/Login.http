@@ -1,5 +1,5 @@
 ﻿
-POST https://localhost:7041/auth/login
+POST {{host}}/auth/login
 Content-Type: application/json
 
 {
