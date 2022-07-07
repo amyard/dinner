@@ -8,15 +8,9 @@ namespace BuyBerDinner.Api.Controllers;
 [Route("auth")]
 public class AuthenticationController : ControllerBase
 {
-    private readonly IAuthenticationService _authenticationService;
-
-    public AuthenticationController(IAuthenticationService authenticationService)
-    {
-        _authenticationService = authenticationService;
-    }
-
     [HttpPost("register")]
-    public IActionResult Register(RegisterRequest request)
+    public IActionResult Register([FromServices] IAuthenticationService _authenticationService, 
+        RegisterRequest request)
     {
         var authResult = _authenticationService.Register(
             request.FirstName, 
@@ -35,7 +29,8 @@ public class AuthenticationController : ControllerBase
     }
     
     [HttpPost("login")]
-    public IActionResult Login(LoginRequest request)
+    public IActionResult Login([FromServices] IAuthenticationService _authenticationService,
+        LoginRequest request)
     {
         var authResult = _authenticationService.Login(
             request.Email, 
