@@ -1,4 +1,5 @@
-﻿using BuyBerDinner.Application.Services.Authentication;
+﻿using BuyBerDinner.Api.Filters;
+using BuyBerDinner.Application.Services.Authentication;
 using BuyBerDinner.Contracts.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,6 +7,7 @@ namespace BuyBerDinner.Api.Controllers;
 
 [ApiController]
 [Route("auth")]
+// [ErrorHandlingFilter] // if need to use only for current controller.
 public class AuthenticationController : ControllerBase
 {
     [HttpPost("register")]
