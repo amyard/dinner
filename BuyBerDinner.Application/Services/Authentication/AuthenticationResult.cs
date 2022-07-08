@@ -1,8 +1,5 @@
-﻿namespace BuyBerDinner.Application.Services.Authentication;
+﻿using BuyBerDinner.Domain.Entities;
 
-public record AuthenticationResult(
-    Guid Id,
-    string FirstName,
-    string LastName,
-    string Email,
-    string Token);
+namespace BuyBerDinner.Application.Services.Authentication;
+
+public record AuthenticationResult(User User, string Token);

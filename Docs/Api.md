@@ -19,30 +19,55 @@ POST {{host}}/auth/register
 #### Register request
 ```json
 {
-  "firstName": "max",
-  "lastName": "awe",
-  "email": "bla@bla.com",
-  "password": "asdasdasd"
+  "firstName": "test",
+  "lastName": "user3000",
+  "email": "testUser3000@gmail.com",
+  "password": "zaza1234*"
 }
 ```
 
-#### Register response
-```json
+```js
 200 OK
 ```
+
+#### Register response
 
 ```json
 {
   "id": "dsfljdsn-skdjfh-sdfsd-sdfsd",
-  "firstName": "max",
-  "lastName": "awe",
-  "email": "bla@bla.com",
+  "firstName": "test",
+  "lastName": "user3000",
+  "email": "testUser3000@gmail.com",
   "token": "dfsdfdsfsdf"
 }
 ```
 
 
 ### LOGIN
-```js
+```json
 POST {{host}}/auth/login
+```
+
+#### Login Request
+```json
+{
+  "email": "testUser3000@gmail.com",
+  "password": "zaza1234*"
+}
+```
+
+```js
+200 OK
+```
+
+#### Login Response
+
+```json
+{
+  "id": "dsfljdsn-skdjfh-sdfsd-sdfsd",
+  "firstName": "test",
+  "lastName": "user3000",
+  "email": "testUser3000@gmail.com",
+  "token": "dfsdfdsfsdf"
+}
 ```

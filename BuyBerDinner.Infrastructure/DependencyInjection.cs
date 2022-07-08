@@ -1,6 +1,8 @@
 ﻿using BuyBerDinner.Application.Common.Interfaces.Authentication;
 using BuyBerDinner.Application.Common.Interfaces.Services;
+using BuyBerDinner.Application.Common.Persistence;
 using BuyBerDinner.Infrastructure.Authentication;
+using BuyBerDinner.Infrastructure.Persistence;
 using BuyBerDinner.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +18,8 @@ public static class DependencyInjection
         
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+
+        services.AddScoped<IUserRepository, UserRepository>();
         
         return services;
     }

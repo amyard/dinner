@@ -1,6 +1,8 @@
-﻿namespace BuyBerDinner.Application.Common.Interfaces.Authentication;
+﻿using BuyBerDinner.Domain.Entities;
+
+namespace BuyBerDinner.Application.Common.Interfaces.Authentication;
 
 public interface IJwtTokenGenerator
 {
-    string GenerateToken(Guid userId, string firstName, string lastName);
+    string GenerateToken(User user);
 }

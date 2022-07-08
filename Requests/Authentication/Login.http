@@ -1,8 +1,7 @@
-﻿
-POST {{host}}/auth/login
+﻿POST {{host}}/auth/login
 Content-Type: application/json
 
 {
-  "email": "bla@bla.com",
-  "password": "asdasdasd"
+  "email": "testUser3000@gmail.com",
+  "password": "zaza1234*"
 }
