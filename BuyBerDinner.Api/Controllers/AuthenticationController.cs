@@ -6,10 +6,9 @@ using ErrorOr;
 
 namespace BuyBerDinner.Api.Controllers;
 
-[ApiController]
 [Route("auth")]
 // [ErrorHandlingFilter] // if need to use only for current controller.
-public class AuthenticationController : ControllerBase
+public class AuthenticationController : ApiController
 {
     [HttpPost("register")]
     public IActionResult Register([FromServices] IAuthenticationService _authenticationService, 
@@ -20,7 +19,7 @@ public class AuthenticationController : ControllerBase
 
         return authResult.Match(
             authResult => Ok(MapAuthResult(authResult)),
-            _ => Problem(statusCode: StatusCodes.Status409Conflict, title: "User already exists."));
+            errors => Problem(errors));
     }
 
 
@@ -32,7 +31,7 @@ public class AuthenticationController : ControllerBase
         
         return authResult.Match(
             authResult => Ok(MapAuthResult(authResult)),
-            _ => Problem(statusCode: StatusCodes.Status409Conflict, title: "Bad credentials."));
+            errors => Problem(errors));
     }
     private static AuthenticationResponse MapAuthResult(ErrorOr<AuthenticationResult> authResult)
     {
