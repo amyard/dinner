@@ -1,10 +1,12 @@
 ﻿using System.Diagnostics;
+using BuyBerDinner.Api.Common.Http;
+using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Options;
 
-namespace BuyBerDinner.Api.Errors;
+namespace BuyBerDinner.Api.Common.Errors;
 
 // COPY ALL FROM DefaultProblemDetailsFactory.cs
 public class DinnerProblemDetailsFactory : ProblemDetailsFactory
@@ -92,6 +94,9 @@ public class DinnerProblemDetailsFactory : ProblemDetailsFactory
         }
         
         //add here custom behavior
-        problemDetails.Extensions.Add("customProperty", "customValue");
+        var errors = httpContext?.Items[HttpContextItemKeys.Errors] as List<Error>;
+        
+        if(errors is not null)
+            problemDetails.Extensions.Add("errorCodes", errors.Select(x => x.Code));
     }
 }
