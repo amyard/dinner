@@ -1,7 +1,8 @@
-﻿using BuyBerDinner.Api.Filters;
+﻿using BuyBerDinner.Application.Common.Errors.UsingOneOf;
 using BuyBerDinner.Application.Services.Authentication;
 using BuyBerDinner.Contracts.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using OneOf;
 
 namespace BuyBerDinner.Api.Controllers;
 
@@ -14,20 +15,11 @@ public class AuthenticationController : ControllerBase
     public IActionResult Register([FromServices] IAuthenticationService _authenticationService, 
         RegisterRequest request)
     {
-        var authResult = _authenticationService.Register(
-            request.FirstName, 
-            request.LastName,
-            request.Email, 
-            request.Password);
+        OneOf<AuthenticationResult, DuplicateEmailError> registerResult = _authenticationService.Register(
+            request.FirstName, request.LastName, request.Email, request.Password);
 
-        var response = new AuthenticationResponse(
-            authResult.User.Id,
-            authResult.User.FirstName,
-            authResult.User.LastName,
-            authResult.User.Email,
-            authResult.Token);
-        
-        return Ok(response);
+        return registerResult.Match(authResult => Ok(MapAuthResult(authResult)),
+            _ => Problem(statusCode: StatusCodes.Status409Conflict, title: "Email already exists"));
     }
     
     [HttpPost("login")]
@@ -46,5 +38,11 @@ public class AuthenticationController : ControllerBase
             authResult.Token);
         
         return Ok(response);
+    }
+    
+    private static AuthenticationResponse MapAuthResult(AuthenticationResult authResult)
+    {
+        return new AuthenticationResponse(authResult.User.Id, authResult.User.FirstName,
+            authResult.User.LastName, authResult.User.Email, authResult.Token);
     }
 }

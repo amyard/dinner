@@ -1,7 +1,9 @@
 ﻿using BuyBerDinner.Application.Common.Errors;
+using BuyBerDinner.Application.Common.Errors.UsingOneOf;
 using BuyBerDinner.Application.Common.Interfaces.Authentication;
 using BuyBerDinner.Application.Common.Persistence;
 using BuyBerDinner.Domain.Entities;
+using OneOf;
 
 namespace BuyBerDinner.Application.Services.Authentication;
 
@@ -32,11 +34,11 @@ public class AuthenticationService : IAuthenticationService
         return new AuthenticationResult(user, token);
     }
 
-    public AuthenticationResult Register(string firstName, string lastName, string email, string password)
+    public OneOf<AuthenticationResult, DuplicateEmailError> Register(string firstName, string lastName, string email, string password)
     {
         // 1. validate the user doesn't exists.
         if (_userRepository.GetUserByEmail(email) is not null)
-            throw new Exception("User with given email already exists.");
+            return new DuplicateEmailError();
             
         // 2. create user & persist to DB
         var user = new User(firstName, lastName, email, password);
