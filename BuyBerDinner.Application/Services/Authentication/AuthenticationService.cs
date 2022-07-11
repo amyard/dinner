@@ -1,4 +1,5 @@
-﻿using BuyBerDinner.Application.Common.Interfaces.Authentication;
+﻿using BuyBerDinner.Application.Common.Errors;
+using BuyBerDinner.Application.Common.Interfaces.Authentication;
 using BuyBerDinner.Application.Common.Persistence;
 using BuyBerDinner.Domain.Entities;
 
@@ -35,7 +36,7 @@ public class AuthenticationService : IAuthenticationService
     {
         // 1. validate the user doesn't exists.
         if (_userRepository.GetUserByEmail(email) is not null)
-            throw new Exception("User with given email already exists.");
+            throw new DuplicateEmailException();
         
         // 2. create user & persist to DB
         var user = new User(firstName, lastName, email, password);

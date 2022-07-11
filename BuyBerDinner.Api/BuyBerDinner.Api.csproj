@@ -13,4 +13,8 @@
     <ProjectReference Include="..\BuyBerDinner.Infrastructure\BuyBerDinner.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Common" />
+  </ItemGroup>
+
 </Project>

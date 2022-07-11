@@ -1,4 +1,4 @@
-using BuyBerDinner.Api.Errors;
+using BuyBerDinner.Api.Common.Errors;
 using BuyBerDinner.Api.Filters;
 using BuyBerDinner.Api.Middleware;
 using BuyBerDinner.Application;
