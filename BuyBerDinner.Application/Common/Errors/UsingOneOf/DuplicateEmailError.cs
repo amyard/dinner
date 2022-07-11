@@ -1,3 +1,5 @@
-﻿namespace BuyBerDinner.Application.Common.Errors.UsingOneOf;
+﻿using System.Net;
 
-public record struct DuplicateEmailError();
+namespace BuyBerDinner.Application.Common.Errors.UsingOneOf;
+
+public record struct DuplicateEmailError(HttpStatusCode StatusCode, string ErrorMessage) : IError;

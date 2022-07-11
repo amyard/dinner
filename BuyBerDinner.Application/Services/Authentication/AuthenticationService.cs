@@ -34,7 +34,7 @@ public class AuthenticationService : IAuthenticationService
         return new AuthenticationResult(user, token);
     }
 
-    public OneOf<AuthenticationResult, DuplicateEmailError> Register(string firstName, string lastName, string email, string password)
+    public OneOf<AuthenticationResult, IError> Register(string firstName, string lastName, string email, string password)
     {
         // 1. validate the user doesn't exists.
         if (_userRepository.GetUserByEmail(email) is not null)
