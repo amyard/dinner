@@ -1,8 +1,8 @@
-﻿using BuyBerDinner.Application.Common.Errors.UsingOneOf;
+﻿using BuyBerDinner.Application.Common.Errors.UsingFluentResults;
 using BuyBerDinner.Application.Services.Authentication;
 using BuyBerDinner.Contracts.Authentication;
+using FluentResults;
 using Microsoft.AspNetCore.Mvc;
-using OneOf;
 
 namespace BuyBerDinner.Api.Controllers;
 
@@ -15,12 +15,18 @@ public class AuthenticationController : ControllerBase
     public IActionResult Register([FromServices] IAuthenticationService _authenticationService, 
         RegisterRequest request)
     {
-        OneOf<AuthenticationResult, IError> registerResult = _authenticationService.Register(
+        Result<AuthenticationResult> registerResult = _authenticationService.Register(
             request.FirstName, request.LastName, request.Email, request.Password);
 
-        return registerResult.Match(
-            authResult => Ok(MapAuthResult(authResult)),
-            error => Problem(statusCode: (int)error.StatusCode, title: error.ErrorMessage));
+        if (registerResult.IsSuccess)
+            return Ok(MapAuthResult(registerResult.Value));
+
+        var firstError = registerResult.Errors[0];
+
+        if (firstError is DuplicateEmailError)
+            return Problem(statusCode: StatusCodes.Status409Conflict, title: "Email already exists.");
+
+        return Problem();
     }
     
     [HttpPost("login")]

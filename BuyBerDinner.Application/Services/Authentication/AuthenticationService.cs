@@ -1,9 +1,9 @@
 ﻿using BuyBerDinner.Application.Common.Errors;
-using BuyBerDinner.Application.Common.Errors.UsingOneOf;
 using BuyBerDinner.Application.Common.Interfaces.Authentication;
 using BuyBerDinner.Application.Common.Persistence;
 using BuyBerDinner.Domain.Entities;
-using OneOf;
+using FluentResults;
+using DuplicateEmailError = BuyBerDinner.Application.Common.Errors.UsingFluentResults.DuplicateEmailError;
 
 namespace BuyBerDinner.Application.Services.Authentication;
 
@@ -34,11 +34,12 @@ public class AuthenticationService : IAuthenticationService
         return new AuthenticationResult(user, token);
     }
 
-    public OneOf<AuthenticationResult, IError> Register(string firstName, string lastName, string email, string password)
+    public Result<AuthenticationResult> Register(string firstName, string lastName, string email, string password)
     {
         // 1. validate the user doesn't exists.
         if (_userRepository.GetUserByEmail(email) is not null)
-            return new DuplicateEmailError();
+            return Result.Fail<AuthenticationResult>(new [] {new DuplicateEmailError()});
+            //return Result.Fail<AuthenticationResult>(new DuplicateEmailError());
             
         // 2. create user & persist to DB
         var user = new User(firstName, lastName, email, password);
