@@ -1,11 +1,11 @@
-﻿using BuyBerDinner.Api.Filters;
-using BuyBerDinner.Application.Services.Authentication;
-using BuyBerDinner.Application.Services.Authentication.Commands;
-using BuyBerDinner.Application.Services.Authentication.Queries;
+﻿using BuyBerDinner.Application.Authentication.Common;
+using BuyBerDinner.Application.Common.Authentication.Commands.Register;
+using BuyBerDinner.Application.Common.Authentication.Queries.Login;
 using BuyBerDinner.Contracts.Authentication;
 using BuyBerDinner.Domain.Common.Errors;
 using Microsoft.AspNetCore.Mvc;
 using ErrorOr;
+using MediatR;
 
 namespace BuyBerDinner.Api.Controllers;
 
@@ -13,13 +13,16 @@ namespace BuyBerDinner.Api.Controllers;
 // [ErrorHandlingFilter] // if need to use only for current controller.
 public class AuthenticationController : ApiController
 {
-    [HttpPost("register")]
-    public IActionResult Register(
-        [FromServices] IAuthenticationCommandService _authenticationCommandServiceService, 
-        RegisterRequest request)
+    private readonly ISender _sender;
+    public AuthenticationController(ISender sender)
     {
-        ErrorOr<AuthenticationResult> authResult = _authenticationCommandServiceService.Register(
-            request.FirstName, request.LastName,request.Email, request.Password);
+        _sender = sender;
+    }
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(RegisterRequest request)
+    {
+        var command = new RegisterCommand(request.FirstName, request.LastName, request.Email, request.Password);
+        ErrorOr<AuthenticationResult> authResult = await _sender.Send(command);
 
         return authResult.Match(
             authResult => Ok(MapAuthResult(authResult)),
@@ -28,11 +31,10 @@ public class AuthenticationController : ApiController
 
 
     [HttpPost("login")]
-    public IActionResult Login(
-        [FromServices] IAuthenticationQueryService _authenticationQueryService,
-        LoginRequest request)
+    public async Task<IActionResult> Login(LoginRequest request)
     {
-        ErrorOr<AuthenticationResult> authResult = _authenticationQueryService.Login(request.Email, request.Password);
+        var query = new LoginQuery(request.Email, request.Password);
+        ErrorOr<AuthenticationResult> authResult = await _sender.Send(query);
 
         if (authResult.IsError && authResult.FirstError == Errors.Authentication.InvalidCredentials)
             return Problem(statusCode: StatusCodes.Status401Unauthorized, title: authResult.FirstError.Description);
