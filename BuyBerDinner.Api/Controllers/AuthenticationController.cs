@@ -1,5 +1,7 @@
 ﻿using BuyBerDinner.Api.Filters;
 using BuyBerDinner.Application.Services.Authentication;
+using BuyBerDinner.Application.Services.Authentication.Commands;
+using BuyBerDinner.Application.Services.Authentication.Queries;
 using BuyBerDinner.Contracts.Authentication;
 using BuyBerDinner.Domain.Common.Errors;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +14,11 @@ namespace BuyBerDinner.Api.Controllers;
 public class AuthenticationController : ApiController
 {
     [HttpPost("register")]
-    public IActionResult Register([FromServices] IAuthenticationService _authenticationService, 
+    public IActionResult Register(
+        [FromServices] IAuthenticationCommandService _authenticationCommandServiceService, 
         RegisterRequest request)
     {
-        ErrorOr<AuthenticationResult> authResult = _authenticationService.Register(
+        ErrorOr<AuthenticationResult> authResult = _authenticationCommandServiceService.Register(
             request.FirstName, request.LastName,request.Email, request.Password);
 
         return authResult.Match(
@@ -25,10 +28,11 @@ public class AuthenticationController : ApiController
 
 
     [HttpPost("login")]
-    public IActionResult Login([FromServices] IAuthenticationService _authenticationService,
+    public IActionResult Login(
+        [FromServices] IAuthenticationQueryService _authenticationQueryService,
         LoginRequest request)
     {
-        ErrorOr<AuthenticationResult> authResult = _authenticationService.Login(request.Email, request.Password);
+        ErrorOr<AuthenticationResult> authResult = _authenticationQueryService.Login(request.Email, request.Password);
 
         if (authResult.IsError && authResult.FirstError == Errors.Authentication.InvalidCredentials)
             return Problem(statusCode: StatusCodes.Status401Unauthorized, title: authResult.FirstError.Description);

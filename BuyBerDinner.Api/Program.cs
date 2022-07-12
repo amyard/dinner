@@ -1,9 +1,6 @@
 using BuyBerDinner.Api.Common.Errors;
-using BuyBerDinner.Api.Filters;
-using BuyBerDinner.Api.Middleware;
-using BuyBerDinner.Application;
+using BuyBerDinner.Application.Common;
 using BuyBerDinner.Infrastructure;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);

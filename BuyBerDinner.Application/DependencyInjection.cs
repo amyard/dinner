@@ -1,13 +1,15 @@
-﻿using BuyBerDinner.Application.Services.Authentication;
+﻿using BuyBerDinner.Application.Services.Authentication.Commands;
+using BuyBerDinner.Application.Services.Authentication.Queries;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BuyBerDinner.Application;
+namespace BuyBerDinner.Application.Common;
 
 public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddScoped<IAuthenticationCommandService, AuthenticationCommandService>();
+        services.AddScoped<IAuthenticationQueryService, AuthenticationQueryService>();
 
         return services;
     }
